@@ -7,9 +7,11 @@ docker ps --all
 
 docker run busybox ping google.com
 
-docker stop 5c94b26ab001
+docker stop d00b704c3528 
 
-docker system prune //delete all container
+docker rm d00b704c3528 
+
+docker run -p 80:80 nginx
 
 docker run -p 8800:80 nginx
 
