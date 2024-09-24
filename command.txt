@@ -16,3 +16,39 @@ docker run -p 80:80 nginx
 docker run -p 8800:80 nginx
 
 docker run -d -p 7800:80 nginx
+
+24/09/67
+docker pull wordpress
+docker pull mysql:5.7
+docker pull phpmyadmin/phpmyadmin
+
+docker network rm wordpress//delete
+docker network create wordpress
+docker network ls
+
+clear //every
+docker run --name mysql --network wordpress -e MYSQL_ROOT_PASSWORD=1111 -e MYSQL_DATABASE=wordpress_db -e MYSQL_USER=wordpress -e MYSQL_ROOT_PASSWORD=wordpress -d mysql:5.7
+docker run --name pma --network wordpress -p 8888:80 -e PMA_ARBITRARY=1 -d phpmyadmin/phpmyadmin
+docker run -d --name wordpress --network wordpress -p 888:80 -e WORDPRESS_DB_HOST=mysql -e WORDPRESS_DB_USER=wordpress -e WORDPRESS_DB_PASSWORD=wordpress -e WORDPRESS_DB_NAME=wordpress_db wordpress
+
+docker exec -it pma sh
+apt-get update
+apt-get install vim
+vi a.text ฝฝกด i พิมข้อมูล กด esc ออก
+พิ, :wq แล้ว enter
+
+docker volume ls //check
+docker volume create wp_volume
+docker volume create mysql_volume
+docker volume rm wp_volume mysql_volume
+
+
+docker container inspect wordpress
+
+docker network create wordpress02
+docker network ls //check
+
+docker run --name mysql02 --network wordpress02 -v mysql_volume:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=1111 -e MYSQL_DATABASE=wordpress02_db -e MYSQL_USER=wordpress -e MYSQL_ROOT_PASSWORD=wordpress -d mysql:5.7
+docker run --name pma02 --network wordpress02 -p 8889:80 -e PMA_ARBITRARY=1 -d phpmyadmin/phpmyadmin
+docker run -d --name wordpress02 --network wordpress02 -v wp_volume:/var/www/html -e WORDPRESS_DB_HOST=mysql02 -e WORDPRESS_DB_USER=wordpress -e WORDPRESS_DB_PASSWORD=wordpress -e WORDPRESS_DB_NAME=wordpress02_db -p 889:80  wordpress
+
